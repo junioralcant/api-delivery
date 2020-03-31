@@ -5,7 +5,7 @@ class ProdutoController {
   async index(req, res) {
     const produtos = await Produto.paginate(null, {
       page: req.query.page || 1,
-      limit: 10,
+      limit: 100,
       populate: ["categoria"],
       sort: "-createdAt"
     });

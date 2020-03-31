@@ -5,11 +5,6 @@ class CategoriaController {
   async index(req, res) {
     const userLogado = await User.findById(req.userId);
 
-    if (userLogado.provedor != true) {
-      return res.status(400).json({
-        mensagem: "Você não tem permissão para ver as categorias"
-      });
-    }
     const categoria = await Categoria.paginate();
 
     return res.json(categoria);

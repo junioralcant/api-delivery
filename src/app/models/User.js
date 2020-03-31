@@ -21,11 +21,13 @@ const UserSchema = new mongoose.Schema({
       },
       cidade: {
         type: String,
-        required: true
+        required: true,
+        default: "São Mateus"
       },
       estado: {
         type: String,
-        required: false
+        required: true,
+        default: "MA"
       },
       numeroCasa: {
         type: String,
