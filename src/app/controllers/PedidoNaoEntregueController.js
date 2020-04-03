@@ -10,7 +10,7 @@ class PedidoNaoEntregueController {
     if (userLogado.provedor !== true) {
       const pedidos = await Pedido.find({
         cliente: req.userId
-      }).populate(["cliente", "produto"]);
+      }).populate(["cliente", "produto.produtoId"]);
 
       return res.json(pedidos);
     }
@@ -18,7 +18,7 @@ class PedidoNaoEntregueController {
     const pedidos = await Pedido.find({
       entregue: false,
       nomeCliente: new RegExp(req.query.nome, "i")
-    }).populate(["cliente", "produto"]);
+    }).populate(["cliente", "produto.produtoId"]);
 
     return res.json(pedidos);
   }
