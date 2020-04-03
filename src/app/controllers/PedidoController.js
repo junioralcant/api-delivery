@@ -97,9 +97,9 @@ class PedidoController {
 
     await pedido.save();
 
-    // req.io.emit("createPedido", {
-    //   message: "Um novo pedido foi realizado"
-    // });
+    req.io.emit("createPedido", {
+      message: "Um novo pedido foi realizado"
+    });
 
     return res.json(pedido);
   }

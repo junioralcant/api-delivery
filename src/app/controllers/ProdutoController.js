@@ -3,7 +3,13 @@ const User = require("../models/User");
 
 class ProdutoController {
   async index(req, res) {
-    const produtos = await Produto.paginate(null, {
+    const filters = {};
+
+    if (req.query.nome) {
+      filters.nome = new RegExp(req.query.nome, "i");
+    }
+
+    const produtos = await Produto.paginate(filters, {
       page: req.query.page || 1,
       limit: 100,
       populate: ["categoria"],
@@ -27,7 +33,7 @@ class ProdutoController {
   }
 
   async show(req, res) {
-    const produto = await Produto.findById(req.params.id);
+    const produto = await Produto.findById(req.params.id).populate("categoria");
     return res.json(produto);
   }
 
