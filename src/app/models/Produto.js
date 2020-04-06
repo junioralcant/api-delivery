@@ -19,6 +19,11 @@ const ProdutoSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  disponivel: {
+    type: Boolean,
+    required: true,
+    default: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
