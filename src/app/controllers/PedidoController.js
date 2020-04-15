@@ -53,7 +53,7 @@ class PedidoController {
 
     const pedidos = await Pedido.paginate(filters, {
       page: req.query.page || 1,
-      limit: 12,
+      limit: parseInt(req.query.limit_page) || 12,
       populate: ["cliente", "produto.produtoId"],
       sort: "-createdAt"
     });
