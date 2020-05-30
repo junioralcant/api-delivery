@@ -22,7 +22,7 @@ class PedidoController {
         req.query.data_min,
         "YYYY-MM-DDT00:mm:ss.SSSZ", // formatação de data e hora
         {
-          timeZone: "America/Sao_Paulo"
+          timeZone: "America/Sao_Paulo",
         }
       );
 
@@ -30,7 +30,7 @@ class PedidoController {
         req.query.data_max,
         "YYYY-MM-DDT23:59:ss.SSSZ", // formatação de data e hora
         {
-          timeZone: "America/Sao_Paulo"
+          timeZone: "America/Sao_Paulo",
         }
       );
 
@@ -43,7 +43,7 @@ class PedidoController {
     // se não for um provedor
     if (userLogado.provedor !== true) {
       const pedidos = await Pedido.find({
-        cliente: req.userId
+        cliente: req.userId,
       })
         .populate(["cliente", "produto.produtoId"])
         .sort("-createdAt");
@@ -55,31 +55,32 @@ class PedidoController {
       page: req.query.page || 1,
       limit: parseInt(req.query.limit_page) || 12,
       populate: ["cliente", "produto.produtoId"],
-      sort: "-createdAt"
+      sort: "-createdAt",
     });
 
     return res.json(pedidos);
   }
 
   async store(req, res) {
-    const { enderecoId, produtos } = req.body;
+    const { enderecoId, produtos, trocoPara } = req.body;
 
     const user = await User.findById(req.userId);
 
     const { endereco } = user;
 
     const enderecoEspecifico = endereco.find(
-      end => String(end._id) === String(enderecoId)
+      (end) => String(end._id) === String(enderecoId)
     );
 
     const pedido = await Pedido.create({
       enderecoEntrega: enderecoEspecifico,
       cliente: req.userId,
-      nomeCliente: user.nome
+      nomeCliente: user.nome,
+      trocoPara,
     });
 
     await Promise.all(
-      produtos.map(async produto => {
+      produtos.map(async (produto) => {
         const produtoAll = await Produto.findById(produto.produtoId);
 
         const valor = produtoAll.preco * produto.quantidade;
@@ -98,7 +99,7 @@ class PedidoController {
     await pedido.save();
 
     req.io.emit("createPedido", {
-      message: "Um novo pedido foi realizado"
+      message: "Um novo pedido foi realizado",
     });
 
     return res.json(pedido);
@@ -115,7 +116,7 @@ class PedidoController {
       userLogado.provedor !== true
     ) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para alterar este pedido."
+        mensagem: "Você não tem permissão para alterar este pedido.",
       });
     }
 
@@ -133,7 +134,7 @@ class PedidoController {
 
     const pedido = await Pedido.findByIdAndUpdate(req.params.id, req.body, {
       valorTotal: produto.preco * req.body.quantidade,
-      new: true
+      new: true,
     });
 
     pedido.valorTotal = produto.preco * req.body.quantidade;
@@ -161,7 +162,7 @@ class PedidoController {
     //permite que apenas o provedor delete pedidos
     if (userLogado.provedor !== true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para excluir este pedido."
+        mensagem: "Você não tem permissão para excluir este pedido.",
       });
     }
 
