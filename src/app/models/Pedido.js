@@ -5,42 +5,47 @@ const PedidoSchema = new mongoose.Schema({
   cliente: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
 
   nomeCliente: {
     type: String,
-    required: true
+    required: true,
   },
   produto: [
     {
       produtoId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Produto",
-        required: true
+        required: true,
       },
       quantidade: Number,
-      valor: Number
-    }
+      valor: Number,
+    },
   ],
 
   entregue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   valorTotal: {
     type: Number,
-    required: false
+    required: false,
   },
+  trocoPara: {
+    type: Number,
+    required: false,
+  },
+
   enderecoEntrega: [{}],
   userOneSignalId: {
     type: String,
-    required: false
+    required: false,
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 PedidoSchema.plugin(mongoosePagiante);
