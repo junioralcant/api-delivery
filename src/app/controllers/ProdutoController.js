@@ -13,7 +13,7 @@ class ProdutoController {
       page: req.query.page || 1,
       limit: 100,
       populate: ["categoria"],
-      sort: "-createdAt"
+      sort: { nome: "asc" },
     });
 
     return res.json(produtos);
@@ -24,7 +24,7 @@ class ProdutoController {
 
     if (userLogado.provedor !== true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para cadadastrar produtos"
+        mensagem: "Você não tem permissão para cadadastrar produtos",
       });
     }
     const produto = await Produto.create(req.body);
@@ -42,11 +42,11 @@ class ProdutoController {
 
     if (userLogado.provedor !== true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para alterar produtos"
+        mensagem: "Você não tem permissão para alterar produtos",
       });
     }
     const produto = await Produto.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
+      new: true,
     });
 
     return res.json(produto);
@@ -57,7 +57,7 @@ class ProdutoController {
 
     if (userLogado.provedor !== true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para deletar produtos"
+        mensagem: "Você não tem permissão para deletar produtos",
       });
     }
     await Produto.findByIdAndDelete(req.params.id);

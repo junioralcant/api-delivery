@@ -5,7 +5,9 @@ class CategoriaController {
   async index(req, res) {
     const userLogado = await User.findById(req.userId);
 
-    const categoria = await Categoria.paginate();
+    const categoria = await Categoria.paginate(null, {
+      sort: { nome: "asc" },
+    });
 
     return res.json(categoria);
   }
@@ -15,7 +17,7 @@ class CategoriaController {
 
     if (userLogado.provedor != true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para cria categorias"
+        mensagem: "Você não tem permissão para cria categorias",
       });
     }
     const categoria = await Categoria.create(req.body);
@@ -28,7 +30,7 @@ class CategoriaController {
 
     if (userLogado.provedor != true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para atualizar categorias"
+        mensagem: "Você não tem permissão para atualizar categorias",
       });
     }
     const categoria = await Categoria.findByIdAndUpdate(
@@ -45,7 +47,7 @@ class CategoriaController {
 
     if (userLogado.provedor != true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para ver as categorias"
+        mensagem: "Você não tem permissão para ver as categorias",
       });
     }
     const categoria = await Categoria.findById(req.params.id);
@@ -58,7 +60,7 @@ class CategoriaController {
 
     if (userLogado.provedor != true) {
       return res.status(400).json({
-        mensagem: "Você não tem permissão para deletar categorias"
+        mensagem: "Você não tem permissão para deletar categorias",
       });
     }
     await Categoria.findByIdAndDelete(req.params.id);
