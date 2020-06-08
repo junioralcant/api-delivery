@@ -1,10 +1,9 @@
 const Categoria = require("../models/Categoria");
+const Produto = require("../models/Produto");
 const User = require("../models/User");
 
 class CategoriaController {
   async index(req, res) {
-    const userLogado = await User.findById(req.userId);
-
     const categoria = await Categoria.paginate(null, {
       sort: { nome: "asc" },
     });
@@ -63,6 +62,9 @@ class CategoriaController {
         mensagem: "Você não tem permissão para deletar categorias",
       });
     }
+
+    await Produto.remove({ categoria: req.params.id });
+
     await Categoria.findByIdAndDelete(req.params.id);
 
     return resp.send();
